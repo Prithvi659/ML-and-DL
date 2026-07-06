@@ -1,0 +1,33 @@
+
+ evalute
+precision = tf.keras.metrics.Precision()
+recall = tf.keras.metrics.Recall()
+accuracy = tf.keras.metrics.BinaryAccuracy()
+
+for batch in test.as_numpy_iterator():
+    X,y = batch
+    y_predict = tf_model.predict(X)
+    precision.update_state(y,y_predict)
+    recall.update_state(y,y_predict)
+    accuracy.update_state(y,y_predict)
+
+print(f"precision : {precision.result().numpy()} , recall : {recall.result().numpy()} accuracy : {accuracy.result().numpy()}")
+
+
+img = cv2.imread("file name")
+plt.imshow(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
+plt.show()
+
+resize = tf.image.resize(img,(256,256))
+plt.imshow(resize.numpy().astype(int))
+plt.show()
+
+np.expand_dims(resize,0).shape
+y_predict = tf_model.predict(np.expand_dims(resize/255, 0))
+
+if y_predict > 0.5:
+    print("sad")
+
+tf_model = tf.keras.models.save("happy sad model.h5")
+new_model = tf.keras.models.load_model("happy sad model.h5")
+

@@ -1,0 +1,14 @@
+Concrete examples to anchor it
+Classification:
+
+Email → spam or not spam
+Tumor → malignant or benign
+Your MAGIC project → gamma or hadron
+Image → cat, dog, or bird (more than 2 classes is still classification — "multi-class")
+
+Regression:
+
+House features → predicted price
+Hours studied → predicted exam score
+Weather data → predicted temperature tomorrow
+Years of experience → predicted salary
