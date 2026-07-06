@@ -20,15 +20,12 @@ def convert_sqft(x):
 dataframe["total_sqft"] = dataframe["total_sqft"].apply(convert_sqft)
 dataframe = dataframe.drop(columns=["society"])
 
-# Numeric features → Fill with mean or median.
-# Categorical features → Fill with mode
 dataframe["location"] = dataframe["location"].fillna(dataframe["location"].mode()[0])
 dataframe["size"] = dataframe["size"].fillna(dataframe["size"].mode()[0])
 dataframe["bath"] = dataframe["bath"].fillna(dataframe["bath"].mean())
 dataframe["balcony"] = dataframe["balcony"].fillna(dataframe["balcony"].mean())
 
 
-# print(dataframe.isnull().sum())
 traget = "price"
 numerical = ["total_sqft","bath","balcony"]
 categorical = ["area_type","availability","location","size"]
@@ -54,7 +51,7 @@ for col in categorical:
 dataframe = dataframe.dropna()
 
 X = dataframe.drop(columns=[traget])
-X = pd.get_dummies(X, drop_first=True)  # Now all text becomes 0/1 numbers.
+X = pd.get_dummies(X, drop_first=True) 
 y = dataframe[traget]
 
 
@@ -89,10 +86,6 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint("best_model.keras",
 )
 csv_logger = tf.keras.callbacks.CSVLogger("traing_log.csv")
 
-# fit the data
-# epochs = one complete pass through dataset of training
-# 50 epochs = check 50 times training data
-# verbose = how much training progress is printed 0 = no print ,1 = more print,2 = less print
 
 history = tf_model.fit(X_train,y_train_scaled,epochs = 100,
      validation_split = 0.2,verbose = 2,callbacks=[checkpoint,csv_logger])
@@ -118,12 +111,12 @@ print("Training history saved to 'training_history.csv'")
 
 plt.figure(figsize=(6,6))
 sns.scatterplot(x=y_test,y=y_predict,alpha=0.5)
-plt.plot([y_test.min(),y_test.max()],          # This is not plotting your prediction
-         [y_test.min(),y_test.max()],color = "red")  # It's drawing the reference line y = x, which represents perfect predictions.
+plt.plot([y_test.min(),y_test.max()],         
+         [y_test.min(),y_test.max()],color = "red")  
 plt.title("actual vs predicated")
 plt.xlabel("actual")
 plt.ylabel("predicted")
 plt.savefig("actual_vs_predicted.png", dpi=100, bbox_inches='tight')
-# plt.show()  63
+
 
 tf_model.save("house_price_tf.h5")
